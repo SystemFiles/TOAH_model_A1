@@ -172,7 +172,7 @@ class TOAHModel:
         >>> m1 == m2
         True
         """
-        pass
+        return self._stools == other._stools
 
     def _cheese_at(self, stool_index, stool_height):
         # """ Return (stool_height)th from stool_index stool, if possible.
