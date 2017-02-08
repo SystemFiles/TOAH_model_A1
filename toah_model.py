@@ -90,7 +90,7 @@ class TOAHModel:
         '''Adds a cheese to the toah_model in amount n..'''
 
         if (self.get_top_cheese(stool_index) is not None) and \
-                (self.get_top_cheese(stool_index).get_size() >= cheese.get_size()):
+                (self.get_top_cheese(stool_index).get_size() <= cheese.get_size()):
             raise IllegalMoveError("Cannot place bigger cheese on smaller cheese... DUH")
         else:
             try:
@@ -117,7 +117,7 @@ class TOAHModel:
         '''Returns the top cheese object on the platform.'''
 
         if len(self._stools[stool_index]) >= 1:
-                return self._stools[stool_index][-1]
+                return self._cheese_at(self._stools[stool_index], -1)
         else:
             return None
 
@@ -152,7 +152,7 @@ class TOAHModel:
         Two TOAHModels are equivalent if their current
         configurations of cheeses on stools look the same.
         More precisely, for all h,s, the h-th cheese on the s-th
-        stool of self should be equivalent the h-th cheese on the s-th
+        stool of self should be equivalent to the h-th cheese on the s-th
         stool of other
 
         @type self: TOAHModel
