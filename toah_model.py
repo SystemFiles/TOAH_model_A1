@@ -52,54 +52,89 @@ class TOAHModel:
         >>> M.get_number_of_cheeses()
         5
         """
+        self._number_of_cheeses = 0
         self._number_stools = number_of_stools
+        self._stools = []
+
+        # create stools from ^ Number of stools
+        for i in range(number_of_stools):
+            self._stools.append([])
         self._move_seq = MoveSequence([])
 
-    def fill_first_stool(self, number_of_cheeses:int) -> None:
+        # self.fill_first_stool(4) # Temp
+
+    def fill_first_stool(self: 'TOAHModel', number_of_cheeses:int) -> None:
         '''Fills the first stool with a certain number of cheeses
         defined by the caller.
         '''
 
+        if self.get_number_of_cheeses() > 0:
+            raise IllegalMoveError("You can't fill a stool with cheeses already present..")
+        else:
+            for i in range(number_of_cheeses, 0, -1): # Bigger on bottom of stack.
+                self.add(Cheese(i), 0)
 
+        self._number_of_cheeses = number_of_cheeses
 
-    def get_number_of_stools(self) -> int:
+    def get_number_of_stools(self: 'TOAHModel') -> int:
         '''Returns the number of stools in TOAHmodel.'''
 
         return self._number_stools
 
-    def number_of_moves(self) -> int:
+    def number_of_moves(self: 'TOAHModel') -> int:
         '''Returns the total number of moves made by this TOAHmodel.'''
 
-        return self.get_move_seq().__sizeof__()
+        return self.get_move_seq().length()
 
-    def add(self, cheese, n:int) -> None:
+    def add(self: 'TOAHModel', cheese: 'Cheese', stool_index:int) -> None:
         '''Adds a cheese to the toah_model in amount n..'''
 
-        pass
+        if (self.get_top_cheese(stool_index) is not None) and \
+                (self.get_top_cheese(stool_index).get_size() >= cheese.get_size()):
+            raise IllegalMoveError("Cannot place bigger cheese on smaller cheese... DUH")
+        else:
+            try:
+                self._stools[stool_index].append(cheese)
+            except IndexError:
+                raise IllegalMoveError("Invalid Move. Cannot Add cheese to place with no stool.")
 
-    def get_cheese_location(self, cheese) -> int:
+    def get_cheese_location(self: 'TOAHModel', cheese: 'Cheese') -> int:
         '''Returns the location of a cheese.'''
 
-        pass
+        # Go through each stool, and see if the Cheese object is in that stool. If so return stool index.
+        # If not, return 0 (TEMP)
+        for i in range(self.get_number_of_stools()):
+            if self._stools[i] == cheese:
+                return i
+        return 0
 
-    def get_number_of_chesses(self) -> int:
+    def get_number_of_cheeses(self: 'TOAHModel') -> int:
         '''Returns the number of cheeses in this TOAHmodel.'''
 
-        # Need to complete fill_first_stool() first...
-        pass
+        return self._number_of_cheeses
 
-    def get_top_cheese(self) -> Cheese:
+    def get_top_cheese(self: 'TOAHModel', stool_index:int) -> 'Cheese':
         '''Returns the top cheese object on the platform.'''
 
-        pass
+        if len(self._stools[stool_index]) >= 1:
+                return self._stools[stool_index][-1]
+        else:
+            return None
 
-    def move(self, cheese, location:tuple) -> None:
+    def remove_top_cheese(self: 'TOAHModel', stool_index) -> 'Cheese':
+        '''Removes the top cheese on stool at stool_index.'''
+
+        return self._stools[stool_index].pop()
+
+    def move(self: 'TOAHModel', start_stool:int, dest_stool:int) -> None:
         '''Moves the cheese object to location.'''
 
-        # write move function
-        pass
+        if (start_stool > len(self._stools)) or (dest_stool > len(self._stools)) or (start_stool == dest_stool):
+            raise IllegalMoveError("Stool does not exist or is the same stool.")
+        else:
+            self.add(dest_stool, self.remove_top_cheese(start_stool))
 
-    def get_move_seq(self):
+    def get_move_seq(self: 'TOAHModel'):
         """ Return the move sequence
 
         @type self: TOAHModel
@@ -222,7 +257,7 @@ class Cheese:
         3
         """
 
-        self.size = size
+        self._size = size
 
     def __eq__(self, other):
         """ Is self equivalent to other?
@@ -235,8 +270,12 @@ class Cheese:
         @rtype: bool
         """
 
-        return self.size == other.size
+        return self._size == other._size
 
+    def get_size(self) -> int:
+        '''Returns the size of the cheese.'''
+
+        return self._size
 
 class IllegalMoveError(Exception):
     """ Exception indicating move that violate TOAHModel
@@ -319,7 +358,6 @@ class MoveSequence(object):
         for move in self._moves:
             model.move(move[0], move[1])
         return model
-
 
 if __name__ == '__main__':
     import doctest
