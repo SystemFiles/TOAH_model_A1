@@ -96,6 +96,7 @@ class TOAHModel:
     def move(self, cheese, location:tuple) -> None:
         '''Moves the cheese object to location.'''
 
+        # write move function
         pass
 
     def get_move_seq(self):
