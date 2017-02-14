@@ -25,6 +25,7 @@ Anne Hoy's problems from the console.
 
 
 from toah_model import TOAHModel, IllegalMoveError
+import sys
 
 
 def move(model, origin, dest):
@@ -40,7 +41,12 @@ def move(model, origin, dest):
         stool number you want to move cheese to
     @rtype: None
     """
-    pass
+
+    try:
+        model.move(origin, dest) # Moves the cheese.
+        print(model) # Prints current state of the game
+    except IllegalMoveError:
+        raise IllegalMoveError
 
 
 class ConsoleController:
@@ -55,7 +61,10 @@ class ConsoleController:
         @param int number_of_stools:
         @rtype: None
         """
-        pass
+
+        self._model = TOAHModel(number_of_stools)
+        self._num_cheeses = number_of_cheeses
+        self._num_stools = number_of_stools
 
     def play_loop(self):
         """ Play Console-based game.
@@ -76,13 +85,55 @@ class ConsoleController:
         -After each valid move, use the method TOAHModel.__str__ that we've
         provided to print a representation of the current state of the game.
         """
-        pass
 
+        print("---------------------- Welcome to the Tour of Anne Hoy Game! -----------------------"
+              "\nThe Goal: \nTo move all Cheeses to the Destination Stool.")
+        u_input = input("-------------------------- Use the following controls: -------------------------- "
+                        "\n\t1. Enter a Move ('M')"
+                        "\n\t2. Quit Game('Q')")
+        if u_input == 'M':
+            print('=========================================')
+            start = int(input("Enter start stool: "))
+            dest = int(input("Enter dest stool: "))
+            done = False
+            while not done:
+                try :
+                    move(self._model, start, dest)  # makes the move!
+                    done = True
+                    print('------------------')
+                except IllegalMoveError:
+                    start = int(input("Error. Enter a new start: "))
+                    dest = int(input("Enter a new dest: "))
+        elif u_input == 'Q':
+            sys.exit(0) # Exit the game.
+        else:
+            raise InvalidInputError
+
+
+class InvalidInputError(Exception):
+    '''An invalid input was entered'''
+
+    pass
 
 if __name__ == '__main__':
     # TODO:
     # You should initiate game play here. Your game should be playable by
     # running this file.
+
+    done = False
+    while not done:
+        u_input = input("What would you like to do? [START] or [QUIT]: ")
+        if u_input == 'START':
+            num_stools = int(input("Great! How many stools are we using? (ie: 1,2,3, etc..): "))
+            num_cheeses = int(input("Cool. Now, how many cheeses? "))
+            console = ConsoleController(num_cheeses, num_stools)
+            console.play_loop()  # Initiate the game.
+            done = True
+        else:
+            print("Hope you enjoyed the game! Bye for now! .... Exiting....")
+            sys.exit(0)
+    print("Game over. Hope you enjoyed your stay! Bye for now!")
+    sys.exit(0)
 
     # Leave lines below as they are, so you will know what python_ta checks.
     # You will need consolecontroller_pyta.txt in the same folder.
