@@ -25,7 +25,6 @@ Anne Hoy's problems from the console.
 
 
 from toah_model import TOAHModel, IllegalMoveError
-import sys
 
 
 def move(model, origin, dest):
@@ -66,6 +65,8 @@ class ConsoleController:
         self._num_cheeses = number_of_cheeses
         self._num_stools = number_of_stools
 
+        self._model.fill_first_stool(num_cheeses) # Fill first stool to start game.
+
     def play_loop(self):
         """ Play Console-based game.
 
@@ -93,19 +94,20 @@ class ConsoleController:
                         "\n\t2. Quit Game('Q')")
         if u_input == 'M':
             print('=========================================')
-            start = int(input("Enter start stool: "))
-            dest = int(input("Enter dest stool: "))
             done = False
             while not done:
-                try :
+                start = int(input("Enter start stool: "))
+                dest = int(input("Enter dest stool: "))
+                try:
                     move(self._model, start, dest)  # makes the move!
-                    done = True
+                    if self._model.get_height_of_stool(num_stools-1) == num_cheeses:
+                        done = True
                     print('------------------')
                 except IllegalMoveError:
-                    start = int(input("Error. Enter a new start: "))
-                    dest = int(input("Enter a new dest: "))
+                    print("Sorry. Illegal Move! Try again\n")
+                    continue
         elif u_input == 'Q':
-            sys.exit(0) # Exit the game.
+            return  # Exit the game.
         else:
             raise InvalidInputError
 
@@ -131,9 +133,7 @@ if __name__ == '__main__':
             done = True
         else:
             print("Hope you enjoyed the game! Bye for now! .... Exiting....")
-            sys.exit(0)
-    print("Game over. Hope you enjoyed your stay! Bye for now!")
-    sys.exit(0)
+            break
 
     # Leave lines below as they are, so you will know what python_ta checks.
     # You will need consolecontroller_pyta.txt in the same folder.
