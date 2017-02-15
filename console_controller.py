@@ -42,8 +42,8 @@ def move(model, origin, dest):
     """
 
     try:
-        model.move(origin, dest) # Moves the cheese.
-        print(model) # Prints current state of the game
+        model.move(origin, dest)  # Moves the cheese.
+        print(model)  # Prints current state of the game
     except IllegalMoveError:
         raise IllegalMoveError
 

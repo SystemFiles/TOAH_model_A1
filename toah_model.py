@@ -71,7 +71,7 @@ class TOAHModel:
         if self.get_number_of_cheeses() > 0:
             raise IllegalMoveError("You can't fill a stool with cheeses already present..")
         else:
-            for i in range(number_of_cheeses, 0, -1):  # Bigger on bottom of stack.
+            for i in range(number_of_cheeses, -1, -1):  # Bigger on bottom of stack.
                 self._stools[0].append(Cheese(i))
 
         self._number_of_cheeses = number_of_cheeses
@@ -94,15 +94,16 @@ class TOAHModel:
     def add(self: 'TOAHModel', cheese: 'Cheese', stool_index:int) -> None:
         '''Adds a cheese to the toah_model in amount n..'''
 
-        if (self.get_top_cheese(stool_index) is not None) and \
-                (self.get_top_cheese(stool_index).size <= cheese.size):
-            raise IllegalMoveError
+        if self.get_top_cheese(stool_index) is not None:
+            print(self.get_top_cheese(stool_index).size, cheese.size)
+            if self.get_top_cheese(stool_index).size <= cheese.size:
+                raise IllegalMoveError("Illegal move. You cannot add a smaller cheese to a larger one..")
         else:
             try:
                 self._stools[stool_index].append(cheese)
+                return
             except IndexError:
                 raise IllegalMoveError("Invalid Move. Cannot Add cheese to place with no stool.")
-
         return
 
     def get_cheese_location(self: 'TOAHModel', cheese: 'Cheese') -> int:
@@ -124,20 +125,26 @@ class TOAHModel:
     def get_top_cheese(self: 'TOAHModel', stool_index:int) -> 'Cheese':
         '''Returns the top cheese object on the platform.'''
 
-        print(self._stools[stool_index])
-        if len(self._stools[stool_index]) > 1:
-            if self._stools[stool_index][-1] is not None:
-                return self._stools[stool_index][-1]
-            else:
-                raise IllegalMoveError
+        # print(self._stools) # TEMP debugging
+        try:
+            if len(self._stools[stool_index]) > 1:
+                if self._stools[stool_index][-1] is not None:
+                    return self._stools[stool_index][-1]
+                else:
+                    raise IllegalMoveError
 
-        else:
-            return None
+            else:
+                return None
+        except IndexError:
+            raise IllegalMoveError("Tried get cheese at stool that doesn't exist.")
 
     def remove_top_cheese(self: 'TOAHModel', stool_index) -> 'Cheese':
         '''Removes the top cheese on stool at stool_index.'''
 
-        return self._stools[stool_index].pop()  # TODO: Fix problem with popping from empty list here..
+        try:
+            return self._stools[stool_index].pop()
+        except IndexError:
+            raise IllegalMoveError("Cannot move cheese from stool with no cheese")
 
     def move(self: 'TOAHModel', start_stool:int, dest_stool:int) -> None:
         '''Moves the cheese object to location.'''
@@ -145,16 +152,13 @@ class TOAHModel:
         if (start_stool > len(self._stools)) or (dest_stool > len(self._stools)) or (start_stool == dest_stool):
             raise IllegalMoveError("Stool does not exist or is the same stool.")
         else:
-            cheese_to_move = self.remove_top_cheese(start_stool)
+            cheese_move = self.remove_top_cheese(start_stool)
             try:
-                # self._stools[dest_stool].append(cheese_to_move)
-                self.add(cheese_to_move, dest_stool)
+                self.add(cheese_move, dest_stool)
                 self.get_move_seq().add_move(start_stool, dest_stool)
             except IllegalMoveError:
                 raise IllegalMoveError
         return
-
-
 
     def get_move_seq(self: 'TOAHModel'):
         """ Return the move sequence
