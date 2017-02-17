@@ -40,7 +40,11 @@ def move(model, origin, dest):
         stool number you want to move cheese to
     @rtype: None
     """
-    pass
+
+    try:
+        model.move(origin, dest)  # Moves the cheese
+    except IllegalMoveError:
+        raise IllegalMoveError
 
 
 class ConsoleController:
@@ -55,7 +59,12 @@ class ConsoleController:
         @param int number_of_stools:
         @rtype: None
         """
-        pass
+
+        self._model = TOAHModel(number_of_stools)
+        self._num_cheeses = number_of_cheeses
+        self._num_stools = number_of_stools
+
+        self._model.fill_first_stool(num_cheeses) #Fill 1st stool to start game
 
     def play_loop(self):
         """ Play Console-based game.
@@ -76,13 +85,36 @@ class ConsoleController:
         -After each valid move, use the method TOAHModel.__str__ that we've
         provided to print a representation of the current state of the game.
         """
-        pass
 
+        while not self._model.is_done():
+            start = input("Enter start stool: ")
+            dest = input("Enter dest stool: ")
+            if start is None or dest is None:
+                break
+            else:
+                start = int(start) - 1
+                dest = int(dest) - 1           
+            move(self._model, start, dest)
+        print("Exiting the game now...\n")
+        
+
+
+class InvalidInputError(Exception):
+    '''An invalid input was entered'''
+    pass
 
 if __name__ == '__main__':
     # TODO:
     # You should initiate game play here. Your game should be playable by
     # running this file.
+    print("-------------- Welcome to the Tour of Anne Hoy Game! ---------------"
+          "\n\tThe Goal: Move all Cheeses to the Dest Stool."
+          "\n\tHit 'Enter' twice to end the game")
+    num_stools = int(input("How many stools are we using? (ie: 1,2,3, etc..):"))
+    num_cheeses = int(input("Cool. Now, how many cheeses?"))
+    console = ConsoleController(num_cheeses, num_stools)
+    console.play_loop()  # Initiate the game.
+
 
     # Leave lines below as they are, so you will know what python_ta checks.
     # You will need consolecontroller_pyta.txt in the same folder.

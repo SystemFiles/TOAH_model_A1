@@ -32,7 +32,6 @@ algorithm.
 
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
-
     Model stools holding stacks of cheese, enforcing the constraint
     that a larger cheese may not be placed on a smaller one.
     """
@@ -40,11 +39,9 @@ class TOAHModel:
     def __init__(self, number_of_stools):
         """ Create new TOAHModel with empty stools
         to hold stools of cheese.
-
         @param TOAHModel self:
         @param int number_of_stools:
         @rtype: None
-
         >>> M = TOAHModel(4)
         >>> M.fill_first_stool(5)
         >>> (M.get_number_of_stools(), M.number_of_moves()) == (4,0)
@@ -71,8 +68,8 @@ class TOAHModel:
         if self.get_number_of_cheeses() > 0:
             raise IllegalMoveError("You can't fill a stool with cheeses already present..")
         else:
-            for i in range(number_of_cheeses, 0, -1): # Bigger on bottom of stack.
-                self.add(Cheese(i), 0)
+            for i in range(number_of_cheeses, 0, -1):  # Bigger on bottom of stack.
+                self._stools[0].append(Cheese(i))
 
         self._number_of_cheeses = number_of_cheeses
 
@@ -86,17 +83,30 @@ class TOAHModel:
 
         return self.get_move_seq().length()
 
+    def get_height_of_stool(self:'TOAHModel', stool_index:int) -> int:
+        '''Returns the height of the current stool at stool_index.'''
+
+        return len(self._stools[stool_index])
+
     def add(self: 'TOAHModel', cheese: 'Cheese', stool_index:int) -> None:
         '''Adds a cheese to the toah_model in amount n..'''
-
-        if (self.get_top_cheese(stool_index) is not None) and \
-                (self.get_top_cheese(stool_index).get_size() <= cheese.get_size()):
-            raise IllegalMoveError("Cannot place bigger cheese on smaller cheese... DUH")
+            ## TODO: Fix Add method. There is an issue here says Dan.
+        if self.get_top_cheese(stool_index) is not None:
+            if self.get_top_cheese(stool_index).size <= cheese.size:
+                raise IllegalMoveError("Illegal move. You cannot add a smaller cheese to a larger one..")
+            else:
+                try:
+                    self._stools[stool_index].append(cheese)
+                    return
+                except IndexError:
+                    raise IllegalMoveError("Stool DNE...")
         else:
             try:
                 self._stools[stool_index].append(cheese)
+                return
             except IndexError:
                 raise IllegalMoveError("Invalid Move. Cannot Add cheese to place with no stool.")
+        return
 
     def get_cheese_location(self: 'TOAHModel', cheese: 'Cheese') -> int:
         '''Returns the location of a cheese.'''
@@ -104,8 +114,9 @@ class TOAHModel:
         # Go through each stool, and see if the Cheese object is in that stool. If so return stool index.
         # If not, return 0 (TEMP)
         for i in range(self.get_number_of_stools()):
-            if self._stools[i] == cheese:
-                return i
+            for j in range(len(self._stools[i])):
+                if self._stools[i][j] == cheese:
+                    return i
         return 0
 
     def get_number_of_cheeses(self: 'TOAHModel') -> int:
@@ -116,15 +127,26 @@ class TOAHModel:
     def get_top_cheese(self: 'TOAHModel', stool_index:int) -> 'Cheese':
         '''Returns the top cheese object on the platform.'''
 
-        if len(self._stools[stool_index]) >= 1:
-                return self._cheese_at(self._stools[stool_index], -1)
-        else:
-            return None
+        # print(self._stools) # TEMP debugging
+        try:
+            if len(self._stools[stool_index]) > 0:
+                if self._stools[stool_index][-1] is not None:
+                    return self._stools[stool_index][-1]
+                else:
+                    raise IllegalMoveError
+
+            else:
+                return None
+        except IndexError:
+            raise IllegalMoveError("Tried get cheese at stool that doesn't exist.")
 
     def remove_top_cheese(self: 'TOAHModel', stool_index) -> 'Cheese':
         '''Removes the top cheese on stool at stool_index.'''
 
-        return self._stools[stool_index].pop()
+        try:
+            return self._stools[stool_index].pop()  # Maybe a problem here.
+        except IndexError:
+            raise IllegalMoveError("Cannot move cheese from stool with no cheese")
 
     def move(self: 'TOAHModel', start_stool:int, dest_stool:int) -> None:
         '''Moves the cheese object to location.'''
@@ -132,33 +154,43 @@ class TOAHModel:
         if (start_stool > len(self._stools)) or (dest_stool > len(self._stools)) or (start_stool == dest_stool):
             raise IllegalMoveError("Stool does not exist or is the same stool.")
         else:
-            self.add(dest_stool, self.remove_top_cheese(start_stool))
+            cheese_move = self.remove_top_cheese(start_stool)
+            try:
+                self.add(cheese_move, dest_stool)
+                self.get_move_seq().add_move(start_stool, dest_stool)
+            except IllegalMoveError:
+                raise IllegalMoveError
+        return
 
     def get_move_seq(self: 'TOAHModel'):
         """ Return the move sequence
-
         @type self: TOAHModel
         @rtype: MoveSequence
-
         >>> toah = TOAHModel(2)
         >>> toah.get_move_seq() == MoveSequence([])
         True
         """
         return self._move_seq
+    
+    def is_done(self) -> bool:
+        '''checks to see if game has been completed'''
+        print(self)
+        if self._number_of_cheeses == len(self._stools[-1]):
+            print("Well done! You've completed the game")
+            return True
+        else:
+            return False
 
     def __eq__(self, other):
         """ Return whether TOAHModel self is equivalent to other.
-
         Two TOAHModels are equivalent if their current
         configurations of cheeses on stools look the same.
         More precisely, for all h,s, the h-th cheese on the s-th
         stool of self should be equivalent to the h-th cheese on the s-th
         stool of other
-
         @type self: TOAHModel
         @type other: TOAHModel
         @rtype: bool
-
         >>> m1 = TOAHModel(4)
         >>> m1.fill_first_stool(7)
         >>> m1.move(0, 1)
@@ -197,7 +229,6 @@ class TOAHModel:
     def __str__(self):
         """
         Depicts only the current state of the stools and cheese.
-
         @param TOAHModel self:
         @rtype: str
         """
@@ -238,18 +269,15 @@ class TOAHModel:
 
 class Cheese:
     """ A cheese for stacking in a TOAHModel
-
     === Attributes ===
     @param int size: width of cheese
     """
 
     def __init__(self, size):
         """ Initialize a Cheese to diameter size.
-
         @param Cheese self:
         @param int size:
         @rtype: None
-
         >>> c = Cheese(3)
         >>> isinstance(c, Cheese)
         True
@@ -257,25 +285,23 @@ class Cheese:
         3
         """
 
-        self._size = size
+        self.size = size
 
-    def __eq__(self, other):
+    def get_size(self) -> int:
+        '''Returns the size of the cheese.'''
+
+        return self.size
+
+    def __eq__(self: 'Cheese', other: 'Cheese') -> bool:
         """ Is self equivalent to other?
-
         We say they are if they're the same
         size.
-
         @param Cheese self:
         @param Cheese|Any other:
         @rtype: bool
         """
 
-        return self._size == other._size
-
-    def get_size(self) -> int:
-        '''Returns the size of the cheese.'''
-
-        return self._size
+        return isinstance(other, Cheese) and self.size == other.size
 
 class IllegalMoveError(Exception):
     """ Exception indicating move that violate TOAHModel
@@ -289,7 +315,6 @@ class MoveSequence(object):
 
     def __init__(self, moves):
         """ Create a new MoveSequence self.
-
         @param MoveSequence self:
         @param list[tuple[int]] moves:
         @rtype: None
@@ -299,11 +324,9 @@ class MoveSequence(object):
 
     def get_move(self, i):
         """ Return the move at position i in self
-
         @param MoveSequence self:
         @param int i:
         @rtype: tuple[int]
-
         >>> ms = MoveSequence([(1, 2)])
         >>> ms.get_move(0) == (1, 2)
         True
@@ -313,7 +336,6 @@ class MoveSequence(object):
 
     def add_move(self, src_stool, dest_stool):
         """ Add move from src_stool to dest_stool to MoveSequence self.
-
         @param MoveSequence self:
         @param int src_stool:
         @param int dest_stool:
@@ -323,10 +345,8 @@ class MoveSequence(object):
 
     def length(self):
         """ Return number of moves in self.
-
         @param MoveSequence self:
         @rtype: int
-
         >>> ms = MoveSequence([(1, 2)])
         >>> ms.length()
         1
@@ -336,17 +356,14 @@ class MoveSequence(object):
     def generate_toah_model(self, number_of_stools, number_of_cheeses):
         """ Construct TOAHModel from number_of_stools and number_of_cheeses
          after moves in self.
-
         Takes the two parameters for
         the game (number_of_cheeses, number_of_stools), initializes the game
         in the standard way with TOAHModel.fill_first_stool(number_of_cheeses),
         and then applies each of the moves in this move sequence.
-
         @param MoveSequence self:
         @param int number_of_stools:
         @param int number_of_cheeses:
         @rtype: TOAHModel
-
         >>> ms = MoveSequence([])
         >>> toah = TOAHModel(2)
         >>> toah.fill_first_stool(2)
