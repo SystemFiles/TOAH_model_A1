@@ -32,7 +32,6 @@ algorithm.
 
 class TOAHModel:
     """ Model a game of Tour Of Anne Hoy.
-
     Model stools holding stacks of cheese, enforcing the constraint
     that a larger cheese may not be placed on a smaller one.
     """
@@ -40,11 +39,9 @@ class TOAHModel:
     def __init__(self, number_of_stools):
         """ Create new TOAHModel with empty stools
         to hold stools of cheese.
-
         @param TOAHModel self:
         @param int number_of_stools:
         @rtype: None
-
         >>> M = TOAHModel(4)
         >>> M.fill_first_stool(5)
         >>> (M.get_number_of_stools(), M.number_of_moves()) == (4,0)
@@ -97,6 +94,12 @@ class TOAHModel:
         if self.get_top_cheese(stool_index) is not None:
             if self.get_top_cheese(stool_index).size <= cheese.size:
                 raise IllegalMoveError("Illegal move. You cannot add a smaller cheese to a larger one..")
+            else:
+                try:
+                    self._stools[stool_index].append(cheese)
+                    return
+                except IndexError:
+                    raise IllegalMoveError("Stool DNE...")
         else:
             try:
                 self._stools[stool_index].append(cheese)
@@ -161,29 +164,33 @@ class TOAHModel:
 
     def get_move_seq(self: 'TOAHModel'):
         """ Return the move sequence
-
         @type self: TOAHModel
         @rtype: MoveSequence
-
         >>> toah = TOAHModel(2)
         >>> toah.get_move_seq() == MoveSequence([])
         True
         """
         return self._move_seq
+    
+    def is_done(self) -> bool:
+        '''checks to see if game has been completed'''
+        print(self)
+        if self._number_of_cheeses == len(self._stools[-1]):
+            print("Well done! You've completed the game")
+            return True
+        else:
+            return False
 
     def __eq__(self, other):
         """ Return whether TOAHModel self is equivalent to other.
-
         Two TOAHModels are equivalent if their current
         configurations of cheeses on stools look the same.
         More precisely, for all h,s, the h-th cheese on the s-th
         stool of self should be equivalent to the h-th cheese on the s-th
         stool of other
-
         @type self: TOAHModel
         @type other: TOAHModel
         @rtype: bool
-
         >>> m1 = TOAHModel(4)
         >>> m1.fill_first_stool(7)
         >>> m1.move(0, 1)
@@ -222,7 +229,6 @@ class TOAHModel:
     def __str__(self):
         """
         Depicts only the current state of the stools and cheese.
-
         @param TOAHModel self:
         @rtype: str
         """
@@ -263,18 +269,15 @@ class TOAHModel:
 
 class Cheese:
     """ A cheese for stacking in a TOAHModel
-
     === Attributes ===
     @param int size: width of cheese
     """
 
     def __init__(self, size):
         """ Initialize a Cheese to diameter size.
-
         @param Cheese self:
         @param int size:
         @rtype: None
-
         >>> c = Cheese(3)
         >>> isinstance(c, Cheese)
         True
@@ -291,10 +294,8 @@ class Cheese:
 
     def __eq__(self: 'Cheese', other: 'Cheese') -> bool:
         """ Is self equivalent to other?
-
         We say they are if they're the same
         size.
-
         @param Cheese self:
         @param Cheese|Any other:
         @rtype: bool
@@ -314,7 +315,6 @@ class MoveSequence(object):
 
     def __init__(self, moves):
         """ Create a new MoveSequence self.
-
         @param MoveSequence self:
         @param list[tuple[int]] moves:
         @rtype: None
@@ -324,11 +324,9 @@ class MoveSequence(object):
 
     def get_move(self, i):
         """ Return the move at position i in self
-
         @param MoveSequence self:
         @param int i:
         @rtype: tuple[int]
-
         >>> ms = MoveSequence([(1, 2)])
         >>> ms.get_move(0) == (1, 2)
         True
@@ -338,7 +336,6 @@ class MoveSequence(object):
 
     def add_move(self, src_stool, dest_stool):
         """ Add move from src_stool to dest_stool to MoveSequence self.
-
         @param MoveSequence self:
         @param int src_stool:
         @param int dest_stool:
@@ -348,10 +345,8 @@ class MoveSequence(object):
 
     def length(self):
         """ Return number of moves in self.
-
         @param MoveSequence self:
         @rtype: int
-
         >>> ms = MoveSequence([(1, 2)])
         >>> ms.length()
         1
@@ -361,17 +356,14 @@ class MoveSequence(object):
     def generate_toah_model(self, number_of_stools, number_of_cheeses):
         """ Construct TOAHModel from number_of_stools and number_of_cheeses
          after moves in self.
-
         Takes the two parameters for
         the game (number_of_cheeses, number_of_stools), initializes the game
         in the standard way with TOAHModel.fill_first_stool(number_of_cheeses),
         and then applies each of the moves in this move sequence.
-
         @param MoveSequence self:
         @param int number_of_stools:
         @param int number_of_cheeses:
         @rtype: TOAHModel
-
         >>> ms = MoveSequence([])
         >>> toah = TOAHModel(2)
         >>> toah.fill_first_stool(2)
