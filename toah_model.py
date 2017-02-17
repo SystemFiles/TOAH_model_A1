@@ -71,7 +71,7 @@ class TOAHModel:
         if self.get_number_of_cheeses() > 0:
             raise IllegalMoveError("You can't fill a stool with cheeses already present..")
         else:
-            for i in range(number_of_cheeses, -1, -1):  # Bigger on bottom of stack.
+            for i in range(number_of_cheeses, 0, -1):  # Bigger on bottom of stack.
                 self._stools[0].append(Cheese(i))
 
         self._number_of_cheeses = number_of_cheeses
@@ -93,9 +93,8 @@ class TOAHModel:
 
     def add(self: 'TOAHModel', cheese: 'Cheese', stool_index:int) -> None:
         '''Adds a cheese to the toah_model in amount n..'''
-
+            ## TODO: Fix Add method. There is an issue here says Dan.
         if self.get_top_cheese(stool_index) is not None:
-            print(self.get_top_cheese(stool_index).size, cheese.size)
             if self.get_top_cheese(stool_index).size <= cheese.size:
                 raise IllegalMoveError("Illegal move. You cannot add a smaller cheese to a larger one..")
         else:
@@ -127,7 +126,7 @@ class TOAHModel:
 
         # print(self._stools) # TEMP debugging
         try:
-            if len(self._stools[stool_index]) > 1:
+            if len(self._stools[stool_index]) > 0:
                 if self._stools[stool_index][-1] is not None:
                     return self._stools[stool_index][-1]
                 else:
@@ -142,7 +141,7 @@ class TOAHModel:
         '''Removes the top cheese on stool at stool_index.'''
 
         try:
-            return self._stools[stool_index].pop()
+            return self._stools[stool_index].pop()  # Maybe a problem here.
         except IndexError:
             raise IllegalMoveError("Cannot move cheese from stool with no cheese")
 
