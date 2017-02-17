@@ -30,7 +30,7 @@ import time
 from toah_model import TOAHModel
 
 
-def tour_of_four_stools(model:'TOAHModel', delay_btw_moves=0.5, animate=False):
+def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
     """Move a tower of cheeses from the first stool in model to the fourth.
 
     @type model: TOAHModel
@@ -42,9 +42,8 @@ def tour_of_four_stools(model:'TOAHModel', delay_btw_moves=0.5, animate=False):
         animate the tour or not
     """
 
-    if model.get_number_of_cheeses() < 4:
+    if model.get_number_of_cheeses() < model.get_number_of_stools():
         cheese = model.remove_top_cheese(0)
-        curr_stool = 0
         i = 1
         while model.get_height_of_stool(0) != 0:
             model.add(cheese, 0)
@@ -52,13 +51,39 @@ def tour_of_four_stools(model:'TOAHModel', delay_btw_moves=0.5, animate=False):
             cheese = model.remove_top_cheese(0)
             i += 1
         model.add(cheese, 0)
-        model.move(0, 3)
+        model.move(0, model.get_number_of_stools()-1)
         for i in range(1, model.get_number_of_cheeses()):
-            model.move(model.get_number_of_cheeses()-i, 3)
+            model.move(model.get_number_of_cheeses()-i, model.get_number_of_stools()-1)
+    elif model.get_number_of_cheeses() == model.get_number_of_stools():
+        model.move(0, model.get_number_of_stools()-1)
+        model.move(0, 1)
+        model.move(model.get_number_of_stools()-1, 1)
+        cheese = model.remove_top_cheese(0)
+        i = 2
+        while model.get_height_of_stool(0) != 0:
+            model.add(cheese, 0)
+            model.move(0, i)
+            cheese = model.remove_top_cheese(0)
+            i += 1
+        model.add(cheese, 0)
+        model.move(0, model.get_number_of_stools() - 1)
+        model.move(model.get_number_of_stools() - 2, model.get_number_of_stools() - 1)
+        model.move(1, 0)
+        model.move(1, model.get_number_of_stools()-1)
+        model.move(0, model.get_number_of_stools()-1)
+    else:
+        for i in range(1, model.get_number_of_stools()):
+            model.move(0, model.get_number_of_stools()-i)
+        for i in range(2, model.get_number_of_stools()):
+            model.move(i, 1)
+
+        pass # TODO: Finish recursive calls
+
+
     print(model.get_move_seq())
 
 if __name__ == '__main__':
-    num_cheeses = 1
+    num_cheeses = 5
     delay_between_moves = 0.5
     console_animate = False
 

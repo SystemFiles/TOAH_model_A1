@@ -185,6 +185,7 @@ class TOAHModel:
         if self._number_of_cheeses == len(self._stools[-1]):
             print("Well done! You've completed the game in {} "
                   "moves!".format(self.get_move_seq().length()))
+            print("Sequence:\n{}".format(self.get_move_seq()))
             return True
         else:
             return False
