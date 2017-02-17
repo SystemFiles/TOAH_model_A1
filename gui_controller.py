@@ -141,7 +141,7 @@ class GUIController:
         stool = self._stools[self._model.get_cheese_location(cheese)]
         stool_index = self.stool_index(stool)
         cheese = self._model.get_top_cheese(stool_index)
-        print(stool, stool_index, cheese)
+        # print(stool, stool_index, cheese)
         if self._cheese_to_move is None:
             self._cheese_to_move = cheese
             self._cheese_to_move.highlight(True)

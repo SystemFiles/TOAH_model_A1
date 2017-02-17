@@ -132,7 +132,6 @@ class TOAHModel:
     def get_top_cheese(self: 'TOAHModel', stool_index: int) -> 'Cheese':
         '''Returns the top cheese object on the platform.'''
 
-        # print(self._stools) # TEMP debugging
         try:
             if len(self._stools[stool_index]) > 0:
                 if self._stools[stool_index][-1] is not None:
@@ -166,6 +165,7 @@ class TOAHModel:
                 self.add(cheese_move, dest_stool)
                 self._move_seq.add_move(start_stool, dest_stool)
             except IllegalMoveError:
+                self.add(cheese_move, start_stool) # If its a fix...its a fix ;)
                 raise IllegalMoveError
         return
 
@@ -184,7 +184,6 @@ class TOAHModel:
         print(self)
         if self._number_of_cheeses == len(self._stools[-1]):
             print("Well done! You've completed the game")
-            #print("Move sequence: ", self._move_seq._moves)
             return True
         else:
             return False

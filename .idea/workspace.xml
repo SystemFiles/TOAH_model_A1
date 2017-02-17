@@ -2,8 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="55840abc-b0f6-4523-ace9-2d11244c13b4" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/toah_model.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/console_controller.py" afterPath="$PROJECT_DIR$/console_controller.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/gui_controller.py" afterPath="$PROJECT_DIR$/gui_controller.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/toah_model.py" afterPath="$PROJECT_DIR$/toah_model.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,8 +23,8 @@
       <file leaf-file-name="gui_controller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2955">
-              <caret line="200" column="35" lean-forward="false" selection-start-line="200" selection-start-column="35" selection-end-line="200" selection-end-column="35" />
+            <state relative-caret-position="140">
+              <caret line="143" column="43" lean-forward="true" selection-start-line="143" selection-start-column="43" selection-end-line="143" selection-end-column="43" />
               <folding />
             </state>
           </provider>
@@ -31,18 +33,18 @@
       <file leaf-file-name="console_controller.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/console_controller.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="96" column="16" lean-forward="false" selection-start-line="96" selection-start-column="16" selection-end-line="96" selection-end-column="16" />
+            <state relative-caret-position="224">
+              <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="toah_model.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="toah_model.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/toah_model.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2190">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="125">
+              <caret line="184" column="60" lean-forward="true" selection-start-line="184" selection-start-column="60" selection-end-line="184" selection-end-column="60" />
               <folding />
             </state>
           </provider>
@@ -51,14 +53,14 @@
       <file leaf-file-name="gui_viewables.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/gui_viewables.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1335">
+            <state relative-caret-position="417">
               <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="tour.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="tour.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/tour.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
@@ -75,6 +77,7 @@
       <find>add</find>
       <find>locatio</find>
       <find>cheese.siz</find>
+      <find>print</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -83,9 +86,9 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/gui_controller.py" />
-        <option value="$PROJECT_DIR$/toah_model.py" />
         <option value="$PROJECT_DIR$/console_controller.py" />
+        <option value="$PROJECT_DIR$/toah_model.py" />
+        <option value="$PROJECT_DIR$/gui_controller.py" />
       </list>
     </option>
   </component>
@@ -131,7 +134,7 @@
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
   </component>
-  <component name="RunManager" selected="Python.console_controller">
+  <component name="RunManager" selected="Python.gui_controller">
     <configuration default="false" name="gui_controller" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -306,8 +309,8 @@
     </list>
     <recent_temporary>
       <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="Python.console_controller" />
-        <item index="1" class="java.lang.String" itemvalue="Python.gui_controller" />
+        <item index="0" class="java.lang.String" itemvalue="Python.gui_controller" />
+        <item index="1" class="java.lang.String" itemvalue="Python.console_controller" />
       </list>
     </recent_temporary>
   </component>
@@ -359,7 +362,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="10" />
+      <option name="time" value="13" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -520,17 +523,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/console_controller.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="103" column="36" lean-forward="false" selection-start-line="103" selection-start-column="36" selection-end-line="103" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/gui_controller.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2955">
-          <caret line="200" column="35" lean-forward="false" selection-start-line="200" selection-start-column="35" selection-end-line="200" selection-end-column="35" />
+        <state relative-caret-position="140">
+          <caret line="143" column="43" lean-forward="true" selection-start-line="143" selection-start-column="43" selection-end-line="143" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/toah_model.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="125">
+          <caret line="184" column="60" lean-forward="true" selection-start-line="184" selection-start-column="60" selection-end-line="184" selection-end-column="60" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/gui_viewables.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1335">
+        <state relative-caret-position="417">
           <caret line="90" column="0" lean-forward="false" selection-start-line="90" selection-start-column="0" selection-end-line="90" selection-end-column="0" />
           <folding />
         </state>
@@ -539,22 +558,6 @@
     <entry file="file://$PROJECT_DIR$/tour.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/console_controller.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="96" column="16" lean-forward="false" selection-start-line="96" selection-start-column="16" selection-end-line="96" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/toah_model.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2190">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
