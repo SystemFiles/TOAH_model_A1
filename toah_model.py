@@ -179,11 +179,12 @@ class TOAHModel:
         """
         return self._move_seq
     
-    def is_done(self) -> bool:
+    def is_done(self: 'TOAHModel') -> bool:
         '''checks to see if game has been completed'''
-        print(self)
+        print(self) # Prints state of game..
         if self._number_of_cheeses == len(self._stools[-1]):
-            print("Well done! You've completed the game")
+            print("Well done! You've completed the game in {} "
+                  "moves!".format(self.get_move_seq().length()))
             return True
         else:
             return False
@@ -213,21 +214,15 @@ class TOAHModel:
         """
         return self._stools == other._stools
 
-    def _cheese_at(self, stool_index, stool_height):
-        # """ Return (stool_height)th from stool_index stool, if possible.
-        #
-        # @type self: TOAHModel
-        # @type stool_index: int
-        # @type stool_height: int
-        # @rtype: Cheese | None
-        #
-        # >>> M = TOAHModel(4)
-        # >>> M.fill_first_stool(5)
-        # >>> M._cheese_at(0,3).size
-        # 2
-        # >>> M._cheese_at(0,0).size
-        # 5
-        # """
+    def _cheese_at(self: 'TOAHModel', stool_index:int, stool_height:int) -> 'Cheese':
+        """ Return (stool_height)th from stool_index stool, if possible.
+        >>> M = TOAHModel(4)
+        >>> M.fill_first_stool(5)
+        >>> M._cheese_at(0,3).size
+        2
+        >>> M._cheese_at(0,0).size
+        5
+        """
         if 0 <= stool_height < len(self._stools[stool_index]):
             return self._stools[stool_index][stool_height]
         else:
@@ -294,7 +289,7 @@ class Cheese:
 
         self.size = size
 
-    def get_size(self) -> int:
+    def get_size(self: 'Cheese') -> int:
         '''Returns the size of the cheese.'''
 
         return self.size
@@ -396,7 +391,9 @@ class MoveSequence(object):
         return True
 
         
-    def __repr__(self):
+    def __repr__(self: 'MoveSequence'):
+        ''' Returns a string containing moves from _moves '''
+
         return str(self._moves)
 
 if __name__ == '__main__':

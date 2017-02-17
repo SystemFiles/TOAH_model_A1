@@ -30,7 +30,7 @@ import time
 from toah_model import TOAHModel
 
 
-def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
+def tour_of_four_stools(model:'TOAHModel', delay_btw_moves=0.5, animate=False):
     """Move a tower of cheeses from the first stool in model to the fourth.
 
     @type model: TOAHModel
@@ -41,11 +41,24 @@ def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
     @type animate: bool
         animate the tour or not
     """
-    pass
 
+    if model.get_number_of_cheeses() < 4:
+        cheese = model.remove_top_cheese(0)
+        curr_stool = 0
+        i = 1
+        while model.get_height_of_stool(0) != 0:
+            model.add(cheese, 0)
+            model.move(0, i)
+            cheese = model.remove_top_cheese(0)
+            i += 1
+        model.add(cheese, 0)
+        model.move(0, 3)
+        for i in range(1, model.get_number_of_cheeses()):
+            model.move(model.get_number_of_cheeses()-i, 3)
+    print(model.get_move_seq())
 
 if __name__ == '__main__':
-    num_cheeses = 5
+    num_cheeses = 1
     delay_between_moves = 0.5
     console_animate = False
 

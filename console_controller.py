@@ -87,16 +87,15 @@ class ConsoleController:
         """
 
         while not self._model.is_done():
-            make_move = input("Move? [Y/N]: ")
-            if not make_move.upper() == 'Y':
+
+            start = input("Enter start stool: ")
+            dest = input("Enter dest stool: ")
+
+            if start == '' or dest == '':
                 break
             else:
-                start = input("Enter start stool: ")
-                dest = input("Enter dest stool: ")
-
                 start = int(start) - 1
                 dest = int(dest) - 1
-
             # Now make the move.
             try:
                 move(self._model, start, dest)
@@ -104,12 +103,6 @@ class ConsoleController:
                 print("Invalid Move!")
 
         print("Exiting the game now...\n")
-        
-
-
-class InvalidInputError(Exception):
-    '''An invalid input was entered'''
-    pass
 
 if __name__ == '__main__':
     # TODO:
