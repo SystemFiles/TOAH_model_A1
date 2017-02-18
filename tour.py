@@ -41,20 +41,62 @@ def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
     @type animate: bool
         animate the tour or not
     """
-
-    if model.get_number_of_cheeses() < model.get_number_of_stools():
+    def less_than_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses < 4'''
+        #if bad_stool == 0:
+        print(model)
         cheese = model.remove_top_cheese(0)
-        i = 1
+        first_empty = 0
+        while model.get_top_cheese(first_empty) is not None:
+            first_empty += 1
         while model.get_height_of_stool(0) != 0:
             model.add(cheese, 0)
-            model.move(0, i)
+            model.move(0, first_empty)
             cheese = model.remove_top_cheese(0)
-            i += 1
+            first_empty += 1
         model.add(cheese, 0)
         model.move(0, model.get_number_of_stools()-1)
+        print(model)
         for i in range(1, model.get_number_of_cheeses()):
-            model.move(model.get_number_of_cheeses()-i, model.get_number_of_stools()-1)
-    elif model.get_number_of_cheeses() == model.get_number_of_stools():
+            model.move(model.get_number_of_cheeses()-i,
+                       model.get_number_of_stools()-1)                
+        '''else:
+            print('else')
+            cheese = model.remove_top_cheese(0)
+            first_empty = 0
+            while model.get_top_cheese(first_empty) is not None:
+                first_empty += 1
+            while model.get_height_of_stool(0) != 0:
+                model.add(cheese, 0)
+                model.move(0, first_empty)
+                cheese = model.remove_top_cheese(0)
+                first_empty += 1
+            model.add(cheese, 0)
+            model.move(0, model.get_number_of_stools()-1)
+            for i in range(1, model.get_number_of_cheeses()):
+                model.move(model.get_number_of_cheeses()-i,
+                           model.get_number_of_stools()-1)               
+
+            ==============
+            model.move(2, 3)
+            empty_stools = []
+            for stool in range(model.get_number_of_stools()):
+                if model.get_top_cheese(stool) is not None:
+                    empty_stools.append(stool)
+            for i in empty_stools:
+                model.move(1, i-1)
+            while not model.is_done():
+                biggest_cheese = model.get_top_cheese(0)
+                for i in range(model.get_number_of_stools()-1):
+                    if (model.get_top_cheese(i) is not None) and \
+                       (biggest_cheese is None or \
+                       biggest_cheese.size < model.get_top_cheese(i).size):
+                        biggest_cheese = model.get_top_cheese(i)
+                model.move(model.get_cheese_location(biggest_cheese), 3)'''
+                
+            
+    def equal_to_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses == 4'''
         model.move(0, model.get_number_of_stools()-1)
         model.move(0, 1)
         model.move(model.get_number_of_stools()-1, 1)
@@ -67,23 +109,39 @@ def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
             i += 1
         model.add(cheese, 0)
         model.move(0, model.get_number_of_stools() - 1)
-        model.move(model.get_number_of_stools() - 2, model.get_number_of_stools() - 1)
+        model.move(model.get_number_of_stools() - 2,
+                   model.get_number_of_stools() - 1)
         model.move(1, 0)
         model.move(1, model.get_number_of_stools()-1)
         model.move(0, model.get_number_of_stools()-1)
-    else:
+
+    def more_than_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses == 4'''
+        first_empty = 0
+        while not model.get_top_cheese(first_empty) is None:
+            first_empty += 1
         for i in range(1, model.get_number_of_stools()):
             model.move(0, model.get_number_of_stools()-i)
         for i in range(2, model.get_number_of_stools()):
             model.move(i, 1)
+        if model.get_height_of_stool(0) > (model.get_number_of_stools() - 2):
+            equal_to_4(model, first_empty)
+        else:
+            less_than_4(model, first_empty)
+        
+    #while not model.is_done():
+    if model.get_number_of_cheeses() < model.get_number_of_stools():
+        less_than_4(model)
+    elif model.get_number_of_cheeses() == model.get_number_of_stools():
+        equal_to_4(model)
+    else:
+        more_than_4(model)
 
-        pass # TODO: Finish recursive calls
-
-
+    print(model)
     print(model.get_move_seq())
 
 if __name__ == '__main__':
-    num_cheeses = 5
+    num_cheeses = 4
     delay_between_moves = 0.5
     console_animate = False
 
