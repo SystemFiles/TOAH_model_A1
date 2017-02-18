@@ -50,13 +50,31 @@ def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
         return  # Nothing...No cheeses to move
     elif num_c == 1:
         model.move(0, 3)  # Move from first stool to last.
+        if animate:
+            time.sleep(delay_between_moves)  # Make delay.
+            animate_console(model) # Animate
     else:
         if num_c > 2:
             k = 2
         else:
             k = 1
-        # ^ We now have an optimal K..., I just can't figure out the recursive call.
+        # ^ We now have an optimal K..., I just can't figure out
+        # the recursive call.
 
+
+        if animate: # Animate recursive.
+            time.sleep(delay_between_moves)  # Make delay.
+            animate_console(model) # Animate
+
+
+def animate_console(model: 'TOAHModel') -> None:
+    '''Animates the state of the game automatically as
+    tour solves the puzzle'''
+
+    print("\n" * 100)  # Simulates the console being cleared..
+    print(model)  # Displays the state of the game..
+
+    return
 if __name__ == '__main__':
     num_cheeses = 4
     delay_between_moves = 0.5
