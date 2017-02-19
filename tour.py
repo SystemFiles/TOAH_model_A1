@@ -59,41 +59,7 @@ def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
         print(model)
         for i in range(1, model.get_number_of_cheeses()):
             model.move(model.get_number_of_cheeses()-i,
-                       model.get_number_of_stools()-1)                
-        '''else:
-            print('else')
-            cheese = model.remove_top_cheese(0)
-            first_empty = 0
-            while model.get_top_cheese(first_empty) is not None:
-                first_empty += 1
-            while model.get_height_of_stool(0) != 0:
-                model.add(cheese, 0)
-                model.move(0, first_empty)
-                cheese = model.remove_top_cheese(0)
-                first_empty += 1
-            model.add(cheese, 0)
-            model.move(0, model.get_number_of_stools()-1)
-            for i in range(1, model.get_number_of_cheeses()):
-                model.move(model.get_number_of_cheeses()-i,
-                           model.get_number_of_stools()-1)               
-
-            ==============
-            model.move(2, 3)
-            empty_stools = []
-            for stool in range(model.get_number_of_stools()):
-                if model.get_top_cheese(stool) is not None:
-                    empty_stools.append(stool)
-            for i in empty_stools:
-                model.move(1, i-1)
-            while not model.is_done():
-                biggest_cheese = model.get_top_cheese(0)
-                for i in range(model.get_number_of_stools()-1):
-                    if (model.get_top_cheese(i) is not None) and \
-                       (biggest_cheese is None or \
-                       biggest_cheese.size < model.get_top_cheese(i).size):
-                        biggest_cheese = model.get_top_cheese(i)
-                model.move(model.get_cheese_location(biggest_cheese), 3)'''
-                
+                       model.get_number_of_stools()-1)
             
     def equal_to_4(model: 'TOAHModel', bad_stool = 0):
         '''Recursive call on tour if cheeses == 4'''
@@ -126,19 +92,40 @@ def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
             model.move(i, 1)
         if model.get_height_of_stool(0) > (model.get_number_of_stools() - 2):
             equal_to_4(model, first_empty)
+            if animate:
+                time.sleep(delay_between_moves)
+                animate_console(model)
         else:
             less_than_4(model, first_empty)
-        
-    #while not model.is_done():
+            if animate:
+                time.sleep(delay_between_moves)
+                animate_console(model)
+
     if model.get_number_of_cheeses() < model.get_number_of_stools():
         less_than_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
     elif model.get_number_of_cheeses() == model.get_number_of_stools():
         equal_to_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
     else:
         more_than_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
 
     print(model)
     print(model.get_move_seq())
+
+def animate_console(model: 'TOAHModel') -> None:
+    '''Animates the state of the game automatically as
+    tour solves the puzzle'''
+
+    print("\n" * 100)  # Simulates the console being cleared..
+    print(model)  # Displays the state of the game..
 
 if __name__ == '__main__':
     num_cheeses = 4
