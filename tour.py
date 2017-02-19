@@ -30,7 +30,7 @@ import time
 from toah_model import TOAHModel
 
 
-def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
+def tour_of_four_stools(model: 'TOAHModel', delay_btw_moves=0.5, animate=False):
     """Move a tower of cheeses from the first stool in model to the fourth.
 
     @type model: TOAHModel
@@ -41,11 +41,94 @@ def tour_of_four_stools(model, delay_btw_moves=0.5, animate=False):
     @type animate: bool
         animate the tour or not
     """
-    pass
+    def less_than_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses < 4'''
+        #if bad_stool == 0:
+        print(model)
+        cheese = model.remove_top_cheese(0)
+        first_empty = 0
+        while model.get_top_cheese(first_empty) is not None:
+            first_empty += 1
+        while model.get_height_of_stool(0) != 0:
+            model.add(cheese, 0)
+            model.move(0, first_empty)
+            cheese = model.remove_top_cheese(0)
+            first_empty += 1
+        model.add(cheese, 0)
+        model.move(0, model.get_number_of_stools()-1)
+        print(model)
+        for i in range(1, model.get_number_of_cheeses()):
+            model.move(model.get_number_of_cheeses()-i,
+                       model.get_number_of_stools()-1)
+            
+    def equal_to_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses == 4'''
+        model.move(0, model.get_number_of_stools()-1)
+        model.move(0, 1)
+        model.move(model.get_number_of_stools()-1, 1)
+        cheese = model.remove_top_cheese(0)
+        i = 2
+        while model.get_height_of_stool(0) != 0:
+            model.add(cheese, 0)
+            model.move(0, i)
+            cheese = model.remove_top_cheese(0)
+            i += 1
+        model.add(cheese, 0)
+        model.move(0, model.get_number_of_stools() - 1)
+        model.move(model.get_number_of_stools() - 2,
+                   model.get_number_of_stools() - 1)
+        model.move(1, 0)
+        model.move(1, model.get_number_of_stools()-1)
+        model.move(0, model.get_number_of_stools()-1)
 
+    def more_than_4(model: 'TOAHModel', bad_stool = 0):
+        '''Recursive call on tour if cheeses == 4'''
+        first_empty = 0
+        while not model.get_top_cheese(first_empty) is None:
+            first_empty += 1
+        for i in range(1, model.get_number_of_stools()):
+            model.move(0, model.get_number_of_stools()-i)
+        for i in range(2, model.get_number_of_stools()):
+            model.move(i, 1)
+        if model.get_height_of_stool(0) > (model.get_number_of_stools() - 2):
+            equal_to_4(model, first_empty)
+            if animate:
+                time.sleep(delay_between_moves)
+                animate_console(model)
+        else:
+            less_than_4(model, first_empty)
+            if animate:
+                time.sleep(delay_between_moves)
+                animate_console(model)
+
+    if model.get_number_of_cheeses() < model.get_number_of_stools():
+        less_than_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
+    elif model.get_number_of_cheeses() == model.get_number_of_stools():
+        equal_to_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
+    else:
+        more_than_4(model)
+        if animate:
+            time.sleep(delay_between_moves)
+            animate_console(model)
+
+    print(model)
+    print(model.get_move_seq())
+
+def animate_console(model: 'TOAHModel') -> None:
+    '''Animates the state of the game automatically as
+    tour solves the puzzle'''
+
+    print("\n" * 100)  # Simulates the console being cleared..
+    print(model)  # Displays the state of the game..
 
 if __name__ == '__main__':
-    num_cheeses = 5
+    num_cheeses = 4
     delay_between_moves = 0.5
     console_animate = False
 
